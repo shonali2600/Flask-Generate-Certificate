@@ -4,6 +4,8 @@ from oauthlib.oauth2 import WebApplicationClient
 from flask import Flask, render_template, redirect, request, flash, url_for, jsonify, abort, send_from_directory
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
+import requests_oauthlib
+from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 from passlib.hash import sha256_crypt
 from password_generator import PasswordGenerator
 from sendgrid import SendGridAPIClient
@@ -22,8 +24,6 @@ from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 import qrcode
 from flask_login import UserMixin
 
-# work done by arpit
-# start
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
@@ -57,6 +57,10 @@ RAZORPAY_KEY_ID = json["razorpay_key_id"]
 RAZORPAY_KEY_SECRET = json["razorpay_key_secret"]
 
 # Google Login Credentials
+FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
+FB_TOKEN_URL = json['facebook_token_url']
+FB_CLIENT_ID=json["facebook_app_id"]
+FB_CLIENT_SECRET=json["facebook_secret"]
 GOOGLE_CLIENT_ID = json["google_client_id"]
 GOOGLE_CLIENT_SECRET = json["google_client_secret"]
 GOOGLE_DISCOVERY_URL = (
@@ -86,6 +90,12 @@ class Users(db.Model, UserMixin):
     last_login = db.Column(db.String(50), nullable=False)
     group = db.relationship('Group', cascade="all,delete", backref='group')
 
+class Token(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), nullable=False)
+    token_id = db.Column(db.String(200), nullable=False)
+    # U->Used, E->Expired, A->Available
+    status = db.Column(db.String(50), nullable=False, default='A')
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -178,7 +188,9 @@ def avatar(email, size):
 
 def send_password_reset_email(name, email):
     token = s.dumps(email, salt='cgv-password-reset')
-    print(token)
+    new_token = Token(email=email,token_id=token,status='A')
+    db.session.add(new_token)
+    db.session.commit()
     if app.debug:
         link = f"http://127.0.0.1:5000/reset-password/{token}"
     else:
@@ -234,12 +246,17 @@ def reset_password(token):
         email = s.loads(token, salt="cgv-password-reset")
         user = Users.query.filter_by(email=email).first()
         user.password = password
+        db_token = Token.query.filter_by(token_id=token).first()
+        db_token.status = 'U'
         db.session.commit()
         flash('Password changed successfully.', 'success')
         return redirect(url_for('loginPage'))
     try:
         email = s.loads(token, salt="cgv-password-reset", max_age=1800)
     except SignatureExpired:
+        db_token = Token.query.filter_by(token_id=token).first()
+        db_token.status = 'E'
+        db.session.commit()
         flash("Sorry, link has been expired.", "error")
         return render_template('forgot-password.html', json=json, verified=False)
     except Exception:
@@ -247,6 +264,13 @@ def reset_password(token):
         return render_template('forgot-password.html', json=json, verified=False)
     user = Users.query.filter_by(email=email).first()
     first_name = user.name.split(" ")[0]
+    db_token = Token.query.filter_by(token_id=token).first()
+    if db_token.status == 'U':
+        flash("Sorry, link has been already used.", "error")
+        return render_template("forgot-password.html", json=json, name=first_name, token=token, verified=False)
+    elif db_token.status == 'E':
+        flash("Sorry, link has been expired.", "error")
+        return render_template("forgot-password.html", json=json, name=first_name, token=token, verified=False)
     return render_template("forgot-password.html", json=json, name=first_name, token=token, verified=True)
 
 
@@ -420,6 +444,7 @@ import pdfkit
 def certificate_generate_string(number):
     postc = Certificate.query.filter_by(number=number).first()
     if (postc != None):
+        style = "display: none;"
         posto = Group.query.filter_by(id=postc.group_id).first()
         qr_code = QRCode.query.filter_by(certificate_num=number).first()
         img_name = f"{qr_code.certificate_num}.png"
@@ -427,11 +452,11 @@ def certificate_generate_string(number):
             base_url = 'http://127.0.0.1:5000/'
         else:
             base_url = json["site_url"]
-        rendered_temp = render_template('certificate.html', postc=postc, posto=posto, qr_code=img_name, json=json, number=number, pdf=True, base_url=base_url)
+        rendered_temp = render_template('certificate.html', postc=postc, posto=posto, qr_code=img_name, json=json, number=number, pdf=True, base_url=base_url, style=style)
         try:
             pdfkit.from_string(rendered_temp, f'{number}.pdf', css='static/css/certificate.css')
         except OSError:
-            pass
+            print(OSError)
         return render_template('certificate.html', postc=postc, posto=posto, qr_code=img_name, json=json, number=number, pdf=False, base_url=base_url)
     else:
         return redirect('/')
@@ -440,19 +465,6 @@ def certificate_generate_string(number):
 def download(filename):
     docs = os.path.join(current_app.root_path)
     return send_from_directory(directory=docs, filename=filename)
-
-
-@app.route("/certifyd/<string:number>", methods=['GET'])
-def certificate_generated_string(number):
-    postc = Certificate.query.filter_by(number=number).first()
-    if (postc != None):
-        posto = Group.query.filter_by(id=postc.group_id).first()
-        style = "display: none;"
-        qr_code = QRCode.query.filter_by(certificate_num=number).first()
-        img_name = f"{qr_code.certificate_num}.png"
-        return render_template('certificate.html', postc=postc, posto=posto, qr_code=img_name, json=json, style=style)
-    else:
-        return redirect('/')
 
 
 # Payment Views
@@ -601,7 +613,9 @@ def match_passwords():
 
 def send_activation_email(name, email):
     token = s.dumps(email, salt='cgv-email-confirm')
-    print(token)
+    new_token = Token(email=email, token_id=token, status='A')
+    db.session.add(new_token)
+    db.session.commit()
     if app.debug:
         link = f"http://127.0.0.1:5000/confirm-email/{token}"
     else:
@@ -678,10 +692,21 @@ def confirm_email(token):
     try:
         email = s.loads(token, salt="cgv-email-confirm", max_age=1800)
     except SignatureExpired:
+        db_token = Token.query.filter_by(token_id=token).first()
+        db_token.status = 'E'
         flash("Sorry, link has been expired.")
         return render_template('login.html', json=json)
+    db_token = Token.query.filter_by(token_id=token).first()
+    if db_token.status == 'U':
+        flash("Sorry, link has been already used.", "error")
+        return render_template("resend.html", json=json)
+    elif db_token.status == 'E':
+        flash("Sorry, link has been expired.", "error")
+        return render_template("resend.html", json=json)
     user = Users.query.filter_by(email=email).first()
     user.status = 1
+    db_token = Token.query.filter_by(token_id=token).first()
+    db_token.status = 'U'
     user.lastlogin = time
     db.session.commit()
     # Some error here
@@ -1132,6 +1157,63 @@ def google_login_callback():
 
     # Send user back to homepage
     return redirect(url_for("dashboard_page"))
+
+
+
+FB_SCOPE=["email","public_profile"]
+
+
+@app.route('/login/facebook')
+def facebook_login():
+    facebook = requests_oauthlib.OAuth2Session(
+        FB_CLIENT_ID, redirect_uri=request.base_url + "/fb-callback", scope=FB_SCOPE
+    )
+    authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+
+    return redirect(authorization_url)
+
+
+
+@app.route('/login/facebook/callback')
+def facebook_login_callback():
+    facebook = requests_oauthlib.OAuth2Session(
+    	FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=request.base_url + "/callback"
+	)
+
+
+    # we need to apply a fix for Facebook here
+    facebook = facebook_compliance_fix(facebook)
+
+    facebook.fetch_token(
+        FB_TOKEN_URL,
+        client_secret=FB_CLIENT_SECRET,
+        authorization_response=flask.request.url,
+    )
+
+    # Fetch a protected resource, i.e. user profile, via Graph API
+
+    facebook_user_data = facebook.get(
+        "https://graph.facebook.com/me?fields=id,name,email,picture{url}"
+    ).json()
+  
+
+    users_email = facebook_user_data["email"]
+    users_name = facebook_user_data["name"]
+    picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
+
+    if not Users.query.filter_by(email=users_email).first():
+        entry = Users(name=users_name, email=users_email, password=password,
+                      profile_image=picture, lastlogin=time, createddate=time, status=1)
+        db.session.add(entry)
+        db.session.commit()
+
+    user = Users.query.filter_by(email=users_email).first()
+    login_user(user)
+
+    # Send user back to homepage
+    return redirect(url_for("dashboard_page"))        
+
+
 
 
 @app.errorhandler(404)
