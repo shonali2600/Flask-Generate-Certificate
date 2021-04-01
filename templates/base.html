@@ -32,6 +32,7 @@
 
 {#  <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="d17af46b-afdd-4665-8862-2ca604c2cadc" data-blockingmode="auto" type="text/javascript"></script>#}
   <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <style>
     /* Custom Scroll */
 
@@ -75,11 +76,9 @@
 
 
   </style>
-</head>
+  </head>
 
-<body>
-
-
+<body class="">
 
 
 {% block body %}  {% endblock %}
@@ -91,10 +90,13 @@
   <footer id="footer" class="section-bg">
     <div class="footer-top">
       <div class="container">
+
+
 {% with messages = get_flashed_messages(with_categories=true) %}
                           {% if messages %}
                           {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}" role="alert">
+                        <div class="alert alert-{{ category }} " role="alert">
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                          {{ message}}
                         </div>
                         {% endfor %}
@@ -171,12 +173,12 @@
                   <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" required/>
                 </div>
                 <div class="form-group">
-                  <input type="phone" class="form-control" name="phone" id="subject" placeholder="Phone" data-rule="minlen:4" data-msg="Please enter your contact number" required/>
+                  <input type="tel" class="form-control" name="phone" id="phone_number" placeholder="Phone"  data-msg="Please enter your contact number"  required/>
                 </div>
                 <div class="form-group">
                   <textarea id="summernote" name="editordata" required></textarea>
               </div>
-               <center><button style="background-color: #F9A826; border-color: #F9A826;" class="btn btn-primary" type="submit" title="Send Feedback">Send Message</button></center>
+               <center><button style="background-color: #F9A826; border-color: #F9A826;" class="btn btn-primary" type="submit" id ="message" title="Send Feedback">Send Message</button></center>
               </form>
 
             </div>
@@ -217,7 +219,7 @@
       }
     }
         </script>
-    
+
 
   <!-- Template Main JS File -->
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
@@ -236,36 +238,6 @@
   </script>
   <!--End of Tawk.to Script-->
 
-  <script>
-    var message="Right Click Disabled!";
-
-  function clickIE4(){
-  if (event.button==2){
-  alert(message);
-  return false;
-   }
-  }
-
-  function clickNS4(e){
-  if (document.layers||document.getElementById&&!document.all){
-  if (e.which==2||e.which==3){
-  alert(message);
-  return false;
-  }
-  }
-  }
-
-  if (document.layers){
-  document.captureEvents(Event.MOUSEDOWN);
-  document.onmousedown=clickNS4;
-  }
-  else if (document.all&&!document.getElementById){
-  document.onmousedown=clickIE4;
-  }
-
-  document.oncontextmenu=new Function("alert(message);return false")
-  </script>
-
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <script>
@@ -275,12 +247,7 @@
   </script>
 
 
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
 </body>
 
 </html>
-
-
-
-
-
-

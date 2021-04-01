@@ -11,25 +11,28 @@
       </div>
     </div>
   </div>
-
+  <!-- dark mode toggle -->
+  <input type="checkbox" id="toggle" name="checkbox" class="switch" onclick="myfun()">
+  <!-- dark mode toggle end -->
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-transparent">
     <div class="container d-flex align-items-center">
 
      <!-- <h1 class="logo mr-auto"><a href="index.html">CGV.IN.NET</a></h1> -->
       <!-- Uncomment below if you prefer to use an image logo -->
-      <a href="index.html" class="logo mr-auto"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="" class="img-fluid"></a>
+      <a href="/" class="logo mr-auto"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="" class="img-fluid"></a>
 
       <nav class="main-nav d-none d-lg-block dark">
         <ul>
           <li class="active"><a href="/">HOME</a></li>
           <li><a href="#why-us">ABOUT US</a></li>
           <li><a href="#services">SERVICES</a></li>
-          <li><a href="#pricing">PRICING</a></li>
           <li><a href="#team">TEAM</a></li>
+          <li><a href="#pricing">PRICING</a></li>
           <li><a href="#footer">CONTACT US</a></li>
           <li><a href="https://cgvs.tawk.help/">HELPDESK</a></li>
-          <li ><a href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a></li>
+          <li><a href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a></li>
+          <!-- <li><a href="#" id="toggle" onclick="myfun()">Toggle Mode</a></li> -->
         </ul>
       </nav><!-- .main-nav-->
 
@@ -41,7 +44,7 @@
     <div class="container d-flex h-100">
       <div class="row justify-content-center align-self-center" data-aos="fade-up">
         <div class="col-md-6 intro-info order-md-first order-last" data-aos="zoom-in" data-aos-delay="100">
-         <h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><span>India’s </span>largest online verification network</h2> 
+         <h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><span>India’s </span>largest online verification network</h2>
           <div>
             <a href="#why-us" class="btn-get-started scrollto">Get Started</a>
             <a href="#footer" class="btn-get-started scrollto" style="margin-top: 5px;">Contact Us</a>
@@ -136,7 +139,7 @@
       </div>
     </section><!-- End Services Section -->
 
-   
+
 
     <!-- ======= Call To Action Section ======= -->
     <section id="call-to-action" class="call-to-action">
@@ -156,97 +159,97 @@
 
 
           <!-- ======= Team Section ======= -->
-    <section id="team" class="team section-bg">
-      <div class="container" data-aos="fade-up">
-        <div class="section-header">
-          <h3>Mentors</h3>
-          <p>Our Mentor team include experienced tech experts</p>
-        </div>
-
-        <div class="row d-flex justify-content-center">
-
-
-          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-              <img src="{{ url_for('static', filename='images/Vignesh.jpg') }}" class="img-fluid" alt="Vignesh Shetty">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4>Vignesh Shetty</h4>
-                  <div class="social">
-                    <a href="https://linkedin/vigneshshettyin"><i class="fa fa-linkedin"></i></a>
-                    <a href="https://github.com/vigneshshettyin"><i class="fa fa-github"></i></a>
-                  </div>
-                </div>
+          <section id="team" class="team section-bg">
+            <div class="container" data-aos="fade-up">
+              <div class="section-header">
+                <h3>Mentors</h3>
+                <p>Our Mentor team include experienced tech experts</p>
               </div>
-            </div>
-          </div>
-
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-              <img src="https://avatars.githubusercontent.com/u/33273990?s=400&u=c3c544e8742324af5946b67ce1cda990ea0f797c&v=4" class="img-fluid" alt="Vignesh Shetty">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4>Antariksh Pratham</h4>
-                  <div class="social">
-                    <a href="https://www.linkedin.com/in/apratham/"><i class="fa fa-linkedin"></i></a>
-                    <a href="https://github.com/APratham"><i class="fa fa-github"></i></a>
+    
+              <div class="carouselWrapper">
+                <div class="row d-flex justify-content-center carouselContainer">
+      
+                    <div class="col-lg-3 col-md-6 carouselItem" data-aos="fade-up" data-aos-delay="200">
+                      <div class="member">
+                        <img src="{{ url_for('static', filename='images/Vignesh.jpg') }}" class="img-fluid" alt="Vignesh Shetty">
+                        <div class="member-info">
+                          <div class="member-info-content">
+                            <h4>Vignesh Shetty</h4>
+                            <div class="social">
+                              <a href="https://linkedin/vigneshshettyin"><i class="fa fa-linkedin"></i></a>
+                              <a href="https://github.com/vigneshshettyin"><i class="fa fa-github"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+                      <div class="col-lg-3 col-md-6 carouselItem" data-aos="fade-up" data-aos-delay="200">
+                      <div class="member">
+                        <img src="https://avatars.githubusercontent.com/u/33273990?s=400&u=c3c544e8742324af5946b67ce1cda990ea0f797c&v=4" class="img-fluid" alt="Vignesh Shetty">
+                        <div class="member-info">
+                          <div class="member-info-content">
+                            <h4>Antariksh Pratham</h4>
+                            <div class="social">
+                              <a href="https://www.linkedin.com/in/apratham/"><i class="fa fa-linkedin"></i></a>
+                              <a href="https://github.com/APratham"><i class="fa fa-github"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+                      <div class="col-lg-3 col-md-6 carouselItem" data-aos="fade-up" data-aos-delay="200">
+                      <div class="member">
+                        <img src="https://avatars.githubusercontent.com/u/58786336?s=400&u=01556e4b364b6b36bd31e5c2b24c9823c24cf9e6&v=4" class="img-fluid" alt="Vignesh Shetty">
+                        <div class="member-info">
+                          <div class="member-info-content">
+                            <h4>Saloni Gupta</h4>
+                            <div class="social">
+          {#                      Please do update your linkedin link#}
+                              <a href="#"><i class="fa fa-linkedin"></i></a>
+                              <a href="https://github.com/shades-7"><i class="fa fa-github"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+                      <div class="col-lg-3 col-md-6 carouselItem" data-aos="fade-up" data-aos-delay="200">
+                      <div class="member">
+                          <img src="https://cdn.discordapp.com/attachments/708550144827719811/819270608687726612/divakar.jpg" class="img-fluid" alt="Vignesh Shetty" width="400" height="400">
+                        <div class="member-info">
+                          <div class="member-info-content">
+                            <h4>Divakar R</h4>
+                            <div class="social">
+                              <a href="https://www.linkedin.com/in/divakar-r-9b34b86b/"><i class="fa fa-linkedin"></i></a>
+                              <a href="https://github.com/rexdivakar"><i class="fa fa-github"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
                   </div>
-                </div>
               </div>
+              
+      
             </div>
-          </div>
-
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-              <img src="https://avatars.githubusercontent.com/u/58786336?s=400&u=01556e4b364b6b36bd31e5c2b24c9823c24cf9e6&v=4" class="img-fluid" alt="Vignesh Shetty">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4>Saloni Gupta</h4>
-                  <div class="social">
-{#                      Please do update your linkedin link#}
-                    <a href="#"><i class="fa fa-linkedin"></i></a>
-                    <a href="https://github.com/shades-7"><i class="fa fa-github"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-                <img src="https://cdn.discordapp.com/attachments/708550144827719811/819270608687726612/divakar.jpg" class="img-fluid" alt="Vignesh Shetty" width="400" height="400">
-              <div class="member-info">
-                <div class="member-info-content">
-                  <h4>Divakar R</h4>
-                  <div class="social">
-                    <a href="https://www.linkedin.com/in/divakar-r-9b34b86b/"><i class="fa fa-linkedin"></i></a>
-                    <a href="https://github.com/rexdivakar"><i class="fa fa-github"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section><!-- End Team Section -->
-
-
+          </section><!-- End Team Section -->
 
 
           <!-- ======= Team Section ======= -->
-    <section id="team" class="team section-bg">
+    <section id="team" class="team section-bg carouselWrapper">
       <div class="container" data-aos="fade-up">
         <div class="section-header pb-3">
           <h3>Contributors</h3>
         </div>
 
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center carouselContainer">
 
           {% for t,d in team.items() %}
-            
-          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-lg-3 col-md-6 carouselItem" data-aos="fade-up" data-aos-delay="200">
             <div class="member">
               <img src="{{ d.image }}" class="img-fluid" alt="#">
               <div class="member-info">
@@ -259,9 +262,9 @@
               </div>
             </div>
           </div>
-          
+
           {% endfor %}
-          
+
 
 
         </div>
@@ -323,7 +326,7 @@
                   <li class="list-group-item">No Subdomain</li>
                   <li class="list-group-item">Only email support</li>
                 </ul>
-                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="basic">Pay</a>
+                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="basic" oncontextmenu="return false">Pay</a>
               </div>
             </div>
           </div>
@@ -345,7 +348,7 @@
                   <li class="list-group-item">24/7 Support System</li>
                 </ul>
                 <!-- <a href="#" class="btn">Choose Plan</a> -->
-                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="regular">Pay</a>
+                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="regular" oncontextmenu="return false">Pay</a>
               </div>
             </div>
           </div>
@@ -366,7 +369,7 @@
                   <li class="list-group-item">Private Domain</li>
                   <li class="list-group-item">24/7 Support System</li>
                 </ul>
-                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="premium">Pay</a>
+                <a href="#" class="payButton" data-toggle="modal" data-dismiss="modal" id="premium" oncontextmenu="return false">Pay</a>
               </div>
             </div>
           </div>
@@ -406,9 +409,9 @@
             <div class="text-center mt-3">
               <button style="background-color: #F9A826; border-color: #F9A826;" class="btn btn-primary" type="submit" title="Pay with Razorpay" id="cnfPay">Pay with Razorpay</button>
             </div>
-            
+
           </form>
-  
+
         </div>
       </div>
     </div>
@@ -434,7 +437,7 @@
 
 
 <div style="padding: 20px;">
-  <center><button style="border:none; background-color: #F9A826;" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal">Submit Feedback</button></center>
+  <center><button style="border:none; background-color: #F9A826;" type="button" class="btn btn-primary btn-lg" id = "feedback" data-toggle="modal" data-target="#exampleModal">Submit Feedback</button></center>
 </div>
 
 <!-- Modal -->
@@ -485,16 +488,39 @@
             </div>
 
             <div class="text-center"><button style="background-color: #F9A826;" class="btn btn-primary" type="submit" title="Send Feedback">Send Feedback</button></div>
-            
+
             <br>
             <br>
           </form>
-  
+
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  let index = 0;
+  const speed = 1.9;
+  const numberOfSlides = 4;
+  const carouselContainer = document.querySelector(".carouselContainer");
+  const carouselItemWidth = carouselContainer.scrollWidth / numberOfSlides;
+  setInterval(() => {
+  carouselContainer.scrollBy(carouselItemWidth, 0);
+  timeoutId = setTimeout(() => {
+  index = index % numberOfSlides;
+  let childToMove = carouselContainer.querySelectorAll(`.carouselItem`)[
+    index
+  ];
+
+  childToMove.style.order =
+    childToMove.style.order && childToMove.style.order === 0
+      ? 1
+      : +childToMove.style.order + 1;
+      index++;
+      clearTimeout(timeoutId);
+      }, 1000);
+  }, speed * 1000);
+</script>
 <!-- End Feedback  -->
 
 {% endblock %}
