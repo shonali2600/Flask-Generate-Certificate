@@ -1,3 +1,4 @@
+
 body {
   background: #fff;
   color: #444;
@@ -1086,6 +1087,35 @@ section {
 #team .member .social i {
   font-size: 18px;
   margin: 0 2px;
+}
+.carouselWrapper {
+  position: relative;
+}
+
+.carouselContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: 0;
+  scrollbar-color: transparent transparent;
+}
+.carouselItem{
+    /* background-color: black; */
+    height: 400px;
+    width: 500px;
+}
+.carouselContainer .carouselItem {
+  flex-grow: 0;
+  flex-shrink: 0;
+  max-width: 100%;
+  /* we are telling browser to align each item centrally to 
+  screen as it scrolls into viewport */
+  scroll-snap-align: center;
+}
+.carouselContainer::-webkit-scrollbar {
+  display: none;
 }
 
 /* Clients Section
