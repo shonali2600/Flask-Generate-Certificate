@@ -39,5 +39,5 @@ SQLAlchemy==1.4.3
 starkbank-ecdsa==1.1.0
 toml==0.10.2
 urllib3==1.26.4
-webargs==7.0.1
+webargs==8.2.0
 Werkzeug==1.0.1
